@@ -1,12 +1,13 @@
 Name:           libaacplus
 Version:        2.0.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        3GPP HE-AAC+ v2 Encoder Shared Library
 
 License:        3GPP Commercial license
 URL:            http://tipok.org.ua/node/17
 Source0:        http://tipok.org.ua/downloads/media/aacplus/%{name}/%{name}-%{version}.tar.gz
 Source1:        http://www.3gpp.org/ftp/Specs/archive/26_series/26.410/26410-800.zip
+Patch0:         %{name}-2.0.2-gcc7.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -37,8 +38,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 3GPP AAC+ High Efficiency Advanced Audio Codec v2 (HE-AAC+) Encoder.
 
 %prep
-%setup -q
+%autosetup
 cp %{SOURCE1} src
+sed -i 's/AM_CONFIG_HEADER/AC_CONFIG_HEADERS/' configure.ac
 
 %build
 # This makes build stop if any download is attempted
@@ -52,14 +54,13 @@ make
 
 %install
 %make_install
-find %{buildroot} -name '*.la' -exec rm -f {} ';'
+find %{buildroot} -name '*.la' -delete
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%{!?_licensedir:%global license %%doc}
 %license COPYING
 %doc AUTHORS README
 %{_libdir}/*.so.*
@@ -74,5 +75,8 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_mandir}/man1/aacplusenc.1*
 
 %changelog
+* Tue Oct 24 2017 Simone Caronni <negativo17@gmail.com> - 2.0.2-2
+- Fix GCC 7 build.
+
 * Sun Dec 13 2015 Simone Caronni <negativo17@gmail.com> - 2.0.2-1
 - First build.

@@ -1,0 +1,12 @@
+diff -Naur libaacplus-2.0.2.old/frontend/au_channel.h libaacplus-2.0.2/frontend/au_channel.h
+--- libaacplus-2.0.2.old/frontend/au_channel.h	2017-10-24 07:26:09.808992254 +0200
++++ libaacplus-2.0.2/frontend/au_channel.h	2017-10-24 07:26:49.452738483 +0200
+@@ -48,7 +48,7 @@
+ 	return handle;
+ }
+ 
+-inline void AuChannelClose (FILE *audioChannel)
++static inline void AuChannelClose (FILE *audioChannel)
+ {
+ 	fclose(audioChannel);
+ }
